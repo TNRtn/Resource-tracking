@@ -8,7 +8,7 @@ import { OpertaionalResult } from '../model/opertaional-result';
   providedIn: 'root'
 })
 export class CetegoryService {
-   apiURl = "http://tnr512.runasp.net/api";
+   apiURl = "https://tnr512.runasp.net/api";
 
   constructor(private http : HttpClient) { 
   }

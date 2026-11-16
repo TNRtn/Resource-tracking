@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class MenuService {
-    apiURl = "http://tnr512.runasp.net/api";
+    apiURl = "https://tnr512.runasp.net/api";
   constructor(private http : HttpClient) { }
   getMenus(projectId: number) {
     const params = {

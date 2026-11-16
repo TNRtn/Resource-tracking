@@ -8,7 +8,7 @@ import { Resources } from '../model/resources';
   providedIn: 'root'
 })
 export class ResourecesService {
-  apiURl = "http://tnr512.runasp.net/api";
+  apiURl = "https://tnr512.runasp.net/api";
   constructor( private http : HttpClient) { 
     
   }

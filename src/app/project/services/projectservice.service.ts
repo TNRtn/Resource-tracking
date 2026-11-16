@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ProjectserviceService {
 
   constructor(private http: HttpClient) { }
-  apiURl = "http://tnr512.runasp.net/api";
+  apiURl = "https://tnr512.runasp.net/api";
   getprojects ():Observable<any>{
     return this.http.get<any>(`${this.apiURl}/Project`);
   }
