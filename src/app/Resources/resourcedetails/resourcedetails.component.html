@@ -1,82 +1,177 @@
 
-<div class="container mt-4">
+<div class="container-fluid py-3 py-md-4 px-3 px-md-4">
 
-  <!-- Header Section -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3>Resource Details</h3>
+  <!-- Page Header -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between
+              align-items-sm-center gap-3 mb-4">
 
-    <button class="btn btn-secondary" (click)="goBack()">
+    <div>
+      <h3 class="fw-bold mb-1">Resource Details</h3>
+      <p class="text-muted mb-0">
+        View resource information and reference materials
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="goBack()">
+      <i class="bi bi-arrow-left me-2"></i>
       Back
     </button>
+
   </div>
 
   <!-- Loading -->
   @if (isLoading) {
-    <div class="text-center mt-3">
-      Loading resource details...
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted mb-0">Loading resource details...</p>
+      </div>
     </div>
   }
 
   <!-- Error -->
-  @if (errorMessage) {
-    <div class="alert alert-danger">
-      {{ errorMessage }}
+  @if (errorMessage && !isLoading) {
+    <div class="alert alert-danger d-flex align-items-center gap-2">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ errorMessage }}</span>
     </div>
   }
 
   <!-- Resource Details -->
   @if (resource && !isLoading) {
 
-    <div class="card shadow-sm">
+    <!-- Resource Title Card -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-body p-3 p-md-4">
 
-      <div class="card-header">
-        <h5 class="mb-0">{{ resource.name  || 'Name'}}</h5>
+        <div class="d-flex align-items-center gap-3">
+          <div class="resource-icon">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+
+          <div class="min-w-0">
+            <h4 class="fw-bold mb-1 text-break">
+              {{ resource.name || 'Untitled Resource' }}
+            </h4>
+            <span class="text-muted small">
+              Resource Information
+            </span>
+          </div>
+        </div>
+
       </div>
+    </div>
 
-      <div class="card-body">
-        
+    <!-- Description -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-body p-3 p-md-4">
 
-        <div class="mb-3">
-          <strong>Description:</strong>
-          <p>{{ resource.description || 'N/A' }}</p>
-        </div>
+        <h5 class="section-title">
+          <i class="bi bi-card-text text-primary me-2"></i>
+          Description
+        </h5>
 
-        <hr>
+        <p class="text-muted mb-0 description-text">
+          {{ resource.description || 'No description available.' }}
+        </p>
 
-        <div class="mb-3">
-          <strong>Reference Keys:</strong>
-          <p>{{ resource.referenceKeys || 'N/A' }}</p>
-        </div>
+      </div>
+    </div>
 
-        <hr>
+    <!-- Reference Keys -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-body p-3 p-md-4">
 
-        <div class="mb-3">
-            <h5>Reference Note Links</h5>
+        <h5 class="section-title">
+          <i class="bi bi-key text-primary me-2"></i>
+          Reference Keys
+        </h5>
 
-            @if (referenceLinks.length > 0) {
-              <ul class="list-group">
-                @for (link of referenceLinks; track $index) {
-                  <li class="list-group-item">
+        <p class="text-muted mb-0 description-text">
+          {{ resource.referenceKeys || 'No reference keys available.' }}
+        </p>
+
+      </div>
+    </div>
+
+    <!-- Reference Note Links -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-body p-3 p-md-4">
+
+        <h5 class="section-title">
+          <i class="bi bi-link-45deg text-primary me-2"></i>
+          Reference Note Links
+        </h5>
+
+        @if (referenceLinks.length > 0) {
+
+          <div class="list-group list-group-flush">
+
+            @for (link of referenceLinks; track $index) {
+              <div class="list-group-item px-0 py-3">
+
+                <div class="d-flex align-items-start gap-3">
+
+                  <div class="link-icon">
+                    <i class="bi bi-globe2"></i>
+                  </div>
+
+                  <div class="flex-grow-1 min-w-0">
                     <a
                       [href]="link"
                       target="_blank"
-                      rel="noopener noreferrer">
+                      rel="noopener noreferrer"
+                      class="reference-link text-break">
                       {{ link }}
                     </a>
-                  </li>
-                }
-              </ul>
-            } @else {
-              <p class="text-muted">No reference links available.</p>
+                  </div>
+
+                  <a
+                    [href]="link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-sm btn-outline-primary flex-shrink-0">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                  </a>
+
+                </div>
+
+              </div>
             }
+
           </div>
 
-        <hr>
+        } @else {
 
-        <div class="mb-3">
-          <strong>Key Points:</strong>
-          <p>{{ resource.keyPoints || 'N/A' }}</p>
-        </div>
+          <div class="text-center py-4">
+            <i class="bi bi-link-45deg empty-icon"></i>
+            <p class="text-muted mb-0 mt-2">
+              No reference links available.
+            </p>
+          </div>
+
+        }
+
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-body p-3 p-md-4">
+
+        <h5 class="section-title">
+          <i class="bi bi-lightbulb text-primary me-2"></i>
+          Key Points
+        </h5>
+
+        <p class="text-muted mb-0 description-text">
+          {{ resource.keyPoints || 'No key points available.' }}
+        </p>
 
       </div>
     </div>

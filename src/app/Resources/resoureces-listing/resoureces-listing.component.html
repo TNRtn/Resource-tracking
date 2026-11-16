@@ -1,36 +1,66 @@
 
-<div class="container mt-4">
+<div class="container-fluid py-3 py-md-4 px-3 px-md-4">
 
   <!-- Page Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3>Resources</h3>
+  <div class="d-flex flex-column flex-sm-row
+              justify-content-between align-items-sm-center
+              gap-3 mb-4">
 
-    <button class="btn btn-primary" [routerLink]="['/project',projectId,'addresource']">
+    <div>
+      <h3 class="fw-bold mb-1">Resource Management</h3>
+      <p class="text-muted mb-0">
+        Manage, search and organize your project resources
+      </p>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      [routerLink]="['/project', projectId, 'addresource']">
+      <i class="bi bi-plus-circle me-2"></i>
       Add Resource
     </button>
+
   </div>
 
-  <!-- Search Section -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
+  <!-- Search and Filter Section -->
+  <div class="card border-0 shadow-sm rounded-3 mb-4">
 
-      <div class="row align-items-end">
+    <div class="card-header bg-white py-3">
+      <h5 class="mb-0 fw-semibold">
+        <i class="bi bi-funnel text-primary me-2"></i>
+        Search & Filter Resources
+      </h5>
+    </div>
+
+    <div class="card-body p-3 p-md-4">
+
+      <div class="row g-3 align-items-end">
 
         <!-- Search by Name -->
-        <div class="col-md-5 mb-3">
-          <label class="form-label">Search Resource</label>
+        <div class="col-12 col-md-6 col-lg-4">
+          <label class="form-label fw-semibold">
+            Search Resource
+          </label>
 
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Enter resource name..."
-            [(ngModel)]="searchText"
-            (keyup.enter)="searchResources()">
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-search"></i>
+            </span>
+
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter resource name..."
+              [(ngModel)]="searchText"
+              (keyup.enter)="searchResources()">
+          </div>
         </div>
 
-        <!-- Category Dropdown -->
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Select Category</label>
+        <!-- Category Filter -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <label class="form-label fw-semibold">
+            Category
+          </label>
 
           <select
             class="form-select"
@@ -46,37 +76,49 @@
 
           </select>
         </div>
-        <div class="col-md-3 mb-3">
-          <label class="form-label">Revision Count</label>
 
-                  <select
-              class="form-select"
-              [(ngModel)]="selectedRevisionCount">
+        <!-- Revision Count Filter -->
+        <div class="col-12 col-md-6 col-lg-2">
+          <label class="form-label fw-semibold">
+            Revision Count
+          </label>
 
-              <option [ngValue]="null">All Revisions</option>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedRevisionCount">
 
-              @for (count of revisionCounts; track count) {
-                <option [ngValue]="count">
-                  {{ count }}
-                </option>
-              }
+            <option [ngValue]="null">All Revisions</option>
 
-            </select>
+            @for (count of revisionCounts; track count) {
+              <option [ngValue]="count">
+                {{ count }}
+              </option>
+            }
+
+          </select>
+        </div>
+
+        <!-- Search and Clear Buttons -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="d-flex gap-2">
+
+            <button
+              type="button"
+              class="btn btn-primary flex-fill"
+              (click)="searchResources()">
+              <i class="bi bi-search me-1"></i>
+              Search
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary flex-fill"
+              (click)="clearSearch()">
+              <i class="bi bi-arrow-counterclockwise me-1"></i>
+              Clear
+            </button>
+
           </div>
-
-        <!-- Buttons -->
-        <div class="col-md-3 mb-3">
-          <button
-            class="btn btn-primary me-2"
-            (click)="searchResources()">
-            Search
-          </button>
-
-          <button
-            class="btn btn-secondary"
-            (click)="clearSearch()">
-            Clear
-          </button>
         </div>
 
       </div>
@@ -84,85 +126,180 @@
     </div>
   </div>
 
-  <!-- Loading -->
-  @if (isLoading) {
-    <div class="text-center mt-3">
-      Loading resources...
-    </div>
-  }
-
-  <!-- Error -->
-  @if (errorMessage) {
-    <div class="alert alert-danger">
+  <!-- Error Message -->
+  @if (errorMessage && !isLoading) {
+    <div class="alert alert-danger d-flex align-items-center gap-2">
+      <i class="bi bi-exclamation-triangle-fill"></i>
       {{ errorMessage }}
     </div>
   }
 
-  <!-- Resource Table -->
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <p class="text-muted mb-0">
+          Loading resources...
+        </p>
+
+      </div>
+    </div>
+  }
+
+  <!-- Resource List -->
   @if (!isLoading) {
 
-    <div class="table-responsive">
+    <div class="card border-0 shadow-sm rounded-3">
 
-      <table class="table table-bordered table-hover align-middle">
+      <!-- Table Header -->
+      <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center">
 
-        <thead class="table-light">
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Revision Count</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+          <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-collection text-primary me-2"></i>
+            Resource List
+          </h5>
 
-        <tbody>
+          <span class="badge bg-primary-subtle text-primary">
+            {{ resources.length }} Resources
+          </span>
 
-          @for (resource of resources; track resource.id; let i = $index) {
-            <tr>
-              <td>{{ i+1 }}</td>
+        </div>
+      </div>
 
-              <td>{{ resource.name }}</td>
+      <div class="card-body p-0">
 
-              <td>{{ resource.description }}</td>
+        <!-- Responsive Table -->
+        <div class="table-responsive">
 
-              <td>{{ resource.categoryName }}</td>
+          <table class="table table-hover align-middle mb-0">
 
-              <td>{{ resource.revisionCount }}</td>
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">#</th>
+                <th>Resource Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Revision Count</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
 
-              <td>
-                <button
-                  class="btn btn-info btn-sm me-2"
-                  [routerLink]="['/project', projectId, 'resourcedetails', resource.id]">
-                  View
-                </button>
+            <tbody>
 
-                <button
-                class ="btn btn-warning btn-sm me-2"
-                [routerLink]="['/project',projectId,'addresource', resource.id]"
-                >Edit</button>
+              @for (resource of resources; track resource.id; let i = $index) {
+                <tr>
 
-                <button
-                class ="btn btn-danger btn-sm"
-                (click) ="deleteResource(resource.id)"
-                >Delete</button>
-              </td>
-            </tr>
-          }
+                  <td class="ps-3 text-muted">
+                    {{ i + 1 }}
+                  </td>
 
-          @if (resources.length === 0) {
-            <tr>
-              <td colspan="6" class="text-center">
-                No resources found.
-              </td>
-            </tr>
-          }
+                  <td>
+                    <span class="fw-semibold">
+                      {{ resource.name }}
+                    </span>
+                  </td>
 
-        </tbody>
+                  <td>
+                    <span class="description-cell">
+                      {{ resource.description || 'N/A' }}
+                    </span>
+                  </td>
 
-      </table>
+                  <td>
+                    <span class="badge bg-light text-dark border">
+                      {{ resource.categoryName || 'N/A' }}
+                    </span>
+                  </td>
 
+                  <td>
+                    <span class="badge bg-info-subtle text-info">
+                      {{ resource.revisionCount }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="d-flex justify-content-center gap-2">
+
+                      <!-- View -->
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-info"
+                        title="View Resource"
+                        [routerLink]="[
+                          '/project',
+                          projectId,
+                          'resourcedetails',
+                          resource.id
+                        ]">
+                        <i class="bi bi-eye"></i>
+                        <span class="d-none d-xl-inline ms-1">View</span>
+                      </button>
+
+                      <!-- Edit -->
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-warning"
+                        title="Edit Resource"
+                        [routerLink]="[
+                          '/project',
+                          projectId,
+                          'addresource',
+                          resource.id
+                        ]">
+                        <i class="bi bi-pencil-square"></i>
+                        <span class="d-none d-xl-inline ms-1">Edit</span>
+                      </button>
+
+                      <!-- Delete -->
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        title="Delete Resource"
+                        (click)="deleteResource(resource.id)">
+                        <i class="bi bi-trash"></i>
+                        <span class="d-none d-xl-inline ms-1">Delete</span>
+                      </button>
+
+                    </div>
+                  </td>
+
+                </tr>
+              }
+
+              <!-- Empty State -->
+              @if (resources.length === 0) {
+                <tr>
+                  <td colspan="6" class="text-center py-5">
+
+                    <i class="bi bi-folder2-open empty-icon"></i>
+
+                    <h6 class="fw-semibold mt-3">
+                      No Resources Found
+                    </h6>
+
+                    <p class="text-muted mb-0">
+                      Try changing your search filters or add a new resource.
+                    </p>
+
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
     </div>
+
   }
 
 </div>

@@ -1,0 +1,68 @@
+
+.card {
+  border-radius: 12px;
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+  min-height: 42px;
+  border-radius: 7px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
+}
+
+.btn {
+  border-radius: 7px;
+  padding: 8px 14px;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+  padding: 15px 12px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table tbody td {
+  padding: 14px 12px;
+  font-size: 14px;
+}
+
+.table tbody tr:hover {
+  background-color: #f8faff;
+}
+
+.description-cell {
+  display: inline-block;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.empty-icon {
+  font-size: 42px;
+  color: #adb5bd;
+}
+
+@media (max-width: 576px) {
+  .table thead th,
+  .table tbody td {
+    padding: 12px 10px;
+  }
+
+  .description-cell {
+    max-width: 150px;
+  }
+}

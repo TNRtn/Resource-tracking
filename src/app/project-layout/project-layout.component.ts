@@ -15,6 +15,7 @@ export class ProjectLayoutComponent implements OnInit{
  menus: Menu[] = [];
  projectId!: number;
   projectName: string = '';
+  isSidebarOpen = false;
  constructor(
     private route: ActivatedRoute,
     private menuService: MenuService,
@@ -61,5 +62,12 @@ export class ProjectLayoutComponent implements OnInit{
   this.router.navigateByUrl(
     `/project/${this.projectId}/${urlPath}`
   );
+  this.isSidebarOpen =!this.isSidebarOpen;
+}
+
+
+
+toggleSidebar(): void {
+  this.isSidebarOpen = !this.isSidebarOpen;
 }
 }

@@ -1,0 +1,31 @@
+
+.card {
+  border-radius: 12px;
+}
+
+.form-control,
+.form-select {
+  min-height: 42px;
+  border-radius: 7px;
+}
+
+textarea.form-control {
+  min-height: 90px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
+}
+
+.btn {
+  border-radius: 7px;
+  padding: 9px 18px;
+}
+
+@media (max-width: 576px) {
+  .card-body {
+    padding: 16px !important;
+  }
+}
