@@ -1,0 +1,192 @@
+
+<div class="container mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Category Management</h3>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="openAddForm()">
+      + Add Category
+    </button>
+  </div>
+
+  <!-- Success Message -->
+  @if (successMessage) {
+    <div class="alert alert-success alert-dismissible">
+      {{ successMessage }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="successMessage = ''">
+      </button>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage) {
+    <div class="alert alert-danger alert-dismissible">
+      {{ errorMessage }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="errorMessage = ''">
+      </button>
+    </div>
+  }
+
+  <!-- Add / Edit Category Form -->
+  @if (showAddForm) {
+    <div class="card mb-4">
+
+      <div class="card-header">
+        <h5 class="mb-0">
+          {{ isEditMode ? 'Edit Category' : 'Add New Category' }}
+        </h5>
+      </div>
+
+      <div class="card-body">
+
+        <form
+          [formGroup]="categoryForm"
+          (ngSubmit)="saveCategory()">
+
+          <div class="mb-3">
+
+            <label class="form-label">
+              Category Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              placeholder="Enter category name">
+
+            @if (
+              categoryForm.controls.name.errors?.['required'] &&
+              categoryForm.controls.name.touched
+            ) {
+              <small class="text-danger">
+                Category name is required.
+              </small>
+            }
+
+            @if (
+              categoryForm.controls.name.errors?.['maxlength'] &&
+              categoryForm.controls.name.touched
+            ) {
+              <small class="text-danger">
+                Maximum 255 characters allowed.
+              </small>
+            }
+
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-success me-2"
+            [disabled]="isSaving">
+
+            @if (isSaving) {
+              Saving...
+            } @else {
+              {{ isEditMode ? 'Update Category' : 'Save Category' }}
+            }
+
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancelAdd()"
+            [disabled]="isSaving">
+            Cancel
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+  }
+
+  <!-- Search and Category List -->
+  <div class="card">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Categories</h5>
+
+      <div class="search-container">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search category..."
+          [(ngModel)]="searchText"
+          (input)="searchCategories()">
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      @if (isLoading) {
+        <div class="text-center p-4">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-2">Loading categories...</p>
+        </div>
+      } @else {
+
+        <div class="table-responsive">
+
+          <table class="table table-bordered table-hover">
+
+            <thead class="table-light">
+              <tr>
+                <th style="width: 10%">S.No</th>
+                <th>Category Name</th>
+                <th style="width: 20%">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for (category of categories; track category.id; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+
+                  <td>{{ category.name }}</td>
+
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-warning me-2"
+                      (click)="editCategory(category)">
+                      Edit
+                    </button>
+
+                    <button type="button" class ="btn btn-sm btn-danger" (click)="deleteCategory(category.id)">Delete
+                      
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="3" class="text-center text-muted p-4">
+                    No categories found.
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </div>
+  </div>
+
+</div>

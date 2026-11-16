@@ -1,0 +1,49 @@
+.project-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: #1e293b;
+  color: white;
+  padding: 20px 12px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-item:hover {
+  background: #334155;
+}
+
+.main-content {
+  flex: 1;
+  padding: 25px;
+  min-width: 0;
+  background: #f8fafc;
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .main-content {
+    padding: 12px;
+  }
+}

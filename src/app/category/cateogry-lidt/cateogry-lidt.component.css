@@ -1,0 +1,25 @@
+.container {
+  max-width: 1100px;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.table th {
+  font-weight: 600;
+  color: #555;
+}
+
+.table td {
+  padding: 14px 10px;
+}
+
+.badge {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.search-container {
+  width: 30%;
+}

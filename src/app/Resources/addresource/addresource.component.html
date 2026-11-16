@@ -1,0 +1,122 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>{{ isEditMode ? 'Edit Resource' : 'Add Resource' }}</h3>
+
+    <button (click)="goBack()" class="btn btn-secondary">
+      Back
+    </button>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <form [formGroup]="resourceForm" (ngSubmit)="onSubmit()">
+
+        <!-- Resource Name -->
+        <div class="mb-3">
+          <label class="form-label">Resource Name *</label>
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="Enter resource name">
+
+          @if (resourceForm.get('name')?.touched &&
+               resourceForm.get('name')?.hasError('required')) {
+            <small class="text-danger">
+              Resource name is required.
+            </small>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+
+          <textarea
+            class="form-control"
+            rows="3"
+            formControlName="description"
+            placeholder="Enter description">
+          </textarea>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <label class="form-label">Category *</label>
+
+          <select class="form-select" formControlName="categoryId">
+            <option [ngValue]="null">Select Category</option>
+
+            @for (category of categories; track category.id) {
+              <option [ngValue]="category.id">
+                {{ category.name }}
+              </option>
+            }
+          </select>
+
+          @if (resourceForm.get('categoryId')?.touched &&
+               resourceForm.get('categoryId')?.hasError('required')) {
+            <small class="text-danger">
+              Please select a category.
+            </small>
+          }
+        </div>
+
+        <!-- Reference Keys -->
+        <div class="mb-3">
+          <label class="form-label">Reference Keys</label>
+
+          <textarea
+            class="form-control"
+            rows="2"
+            formControlName="referenceKeys"
+            placeholder="Enter reference keys">
+          </textarea>
+        </div>
+
+        <!-- Reference Note Links -->
+        <div class="mb-3">
+          <label class="form-label">Reference Note Links</label>
+
+          <textarea
+            class="form-control"
+            rows="3"
+            formControlName="referenceNoteLinks"
+            placeholder="Enter reference links">
+          </textarea>
+        </div>
+
+        <!-- Key Points -->
+        <div class="mb-3">
+          <label class="form-label">Key Points</label>
+
+          <textarea
+            class="form-control"
+            rows="3"
+            formControlName="keyPoints"
+            placeholder="Enter key points">
+          </textarea>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSubmitting">
+
+          {{ isEditMode ? 'Update Resource' : 'Add Resource' }}
+
+        </button>
+
+        <a routerLink="/resources" class="btn btn-outline-secondary ms-2">
+          Cancel
+        </a>
+
+      </form>
+
+    </div>
+  </div>
+</div>

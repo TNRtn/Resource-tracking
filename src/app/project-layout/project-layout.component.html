@@ -1,0 +1,30 @@
+<div class="project-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <h4 class="sidebar-title">{{projectName}}</h4>
+
+    @for (menu of menus; track menu.id) {
+
+      <div class="menu-item"
+           (click)="navigateToMenu(menu)">
+
+        <i class="bi bi-grid"></i>
+
+        <span>{{ menu.name }}</span>
+
+      </div>
+
+    }
+
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <router-outlet></router-outlet>
+
+  </main>
+
+</div>

@@ -1,0 +1,168 @@
+
+<div class="container mt-4">
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Resources</h3>
+
+    <button class="btn btn-primary" [routerLink]="['/project',projectId,'addresource']">
+      Add Resource
+    </button>
+  </div>
+
+  <!-- Search Section -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <div class="row align-items-end">
+
+        <!-- Search by Name -->
+        <div class="col-md-5 mb-3">
+          <label class="form-label">Search Resource</label>
+
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter resource name..."
+            [(ngModel)]="searchText"
+            (keyup.enter)="searchResources()">
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Select Category</label>
+
+          <select
+            class="form-select"
+            [(ngModel)]="selectedCategoryId">
+
+            <option [ngValue]="null">All Categories</option>
+
+            @for (category of categories; track category.id) {
+              <option [ngValue]="category.id">
+                {{ category.name }}
+              </option>
+            }
+
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Revision Count</label>
+
+                  <select
+              class="form-select"
+              [(ngModel)]="selectedRevisionCount">
+
+              <option [ngValue]="null">All Revisions</option>
+
+              @for (count of revisionCounts; track count) {
+                <option [ngValue]="count">
+                  {{ count }}
+                </option>
+              }
+
+            </select>
+          </div>
+
+        <!-- Buttons -->
+        <div class="col-md-3 mb-3">
+          <button
+            class="btn btn-primary me-2"
+            (click)="searchResources()">
+            Search
+          </button>
+
+          <button
+            class="btn btn-secondary"
+            (click)="clearSearch()">
+            Clear
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="text-center mt-3">
+      Loading resources...
+    </div>
+  }
+
+  <!-- Error -->
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- Resource Table -->
+  @if (!isLoading) {
+
+    <div class="table-responsive">
+
+      <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-light">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Revision Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (resource of resources; track resource.id; let i = $index) {
+            <tr>
+              <td>{{ i+1 }}</td>
+
+              <td>{{ resource.name }}</td>
+
+              <td>{{ resource.description }}</td>
+
+              <td>{{ resource.categoryName }}</td>
+
+              <td>{{ resource.revisionCount }}</td>
+
+              <td>
+                <button
+                  class="btn btn-info btn-sm me-2"
+                  [routerLink]="['/project', projectId, 'resourcedetails', resource.id]">
+                  View
+                </button>
+
+                <button
+                class ="btn btn-warning btn-sm me-2"
+                [routerLink]="['/project',projectId,'addresource', resource.id]"
+                >Edit</button>
+
+                <button
+                class ="btn btn-danger btn-sm"
+                (click) ="deleteResource(resource.id)"
+                >Delete</button>
+              </td>
+            </tr>
+          }
+
+          @if (resources.length === 0) {
+            <tr>
+              <td colspan="6" class="text-center">
+                No resources found.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+</div>
