@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../model/category';
 import { OpertaionalResult } from '../model/opertaional-result';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CetegoryService {
-   apiURl = "https://tnr512.runasp.net/api";
+   apiURl = environment .apiURl;
 
   constructor(private http : HttpClient) { 
   }

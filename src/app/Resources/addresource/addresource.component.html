@@ -137,8 +137,37 @@
               placeholder="Enter important key points">
             </textarea>
           </div>
+          @if(isEditMode){
+          <div class="col-12">
+            <label class="form-label fw-semibold">
+              Revision Count
+            </label>
 
+                        <input
+                type="number"
+                class="form-control"
+                formControlName="revisionCount"
+                min="0"
+                max="5"
+                step="1"
+                placeholder="Enter revision count">
+
+              @if (resourceForm.get('revisionCount')?.touched &&
+                  resourceForm.get('revisionCount')?.hasError('min')) {
+                <small class="text-danger">
+                  Minimum revision count is 0.
+                </small>
+              }
+                @if (resourceForm.get('revisionCount')?.touched &&
+                          resourceForm.get('revisionCount')?.hasError('max')) {
+                        <small class="text-danger">
+                          Maximum revision count is 5.
+                        </small>
+                      }
+                </div>
+              }
         </div>
+      
 
         <!-- Form Actions -->
         <hr class="my-4">
@@ -146,7 +175,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
 
           <a
-            routerLink="/resources"
+            (click)="goBack()"
             class="btn btn-outline-secondary order-2 order-sm-1">
             Cancel
           </a>

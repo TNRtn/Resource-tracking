@@ -1,0 +1,136 @@
+
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h3>
+      {{ isEditMode ? 'Edit Time Period' : 'Add Time Period' }}
+    </h3>
+
+    <button class="btn btn-secondary" (click)="goBack()">
+      Back
+    </button>
+
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <form [formGroup]="timePeriodForm" (ngSubmit)="saveTimePeriod()">
+
+        <div class="row g-3">
+
+          <!-- Name -->
+          <div class="col-md-6">
+            <label class="form-label">Name *</label>
+
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              placeholder="Enter time period name">
+
+            <small class="text-danger"
+              *ngIf="timePeriodForm.get('name')?.touched &&
+                     timePeriodForm.get('name')?.invalid">
+              Name is required.
+            </small>
+          </div>
+
+          <!-- Date -->
+          <div class="col-md-6">
+            <label class="form-label">Period Date *</label>
+
+            <input
+              type="date"
+              class="form-control"
+              formControlName="periodDate">
+          </div>
+
+          <!-- Category -->
+          <div class="col-md-6">
+            <label class="form-label">Category *</label>
+
+            <select
+              class="form-select"
+              formControlName="categoryId">
+
+              <option [ngValue]="0">Select Category</option>
+
+              <option
+                *ngFor="let category of categories"
+                [ngValue]="category.id">
+
+                {{ category.name }}
+
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+            <label class="form-label">Description</label>
+
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="description"
+              placeholder="Enter description">
+            </textarea>
+          </div>
+
+          <!-- Key Notes -->
+          <div class="col-12">
+            <label class="form-label">Key Notes</label>
+
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="keyNotes"
+              placeholder="Enter key notes">
+            </textarea>
+          </div>
+
+          <!-- Reference Links -->
+          <div class="col-12">
+            <label class="form-label">Key Reference Links</label>
+
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="keyReferenceLinks"
+              placeholder="Enter reference links">
+            </textarea>
+          </div>
+
+          <!-- Submit -->
+          <div class="col-12 mt-4">
+
+            <button
+              type="submit"
+              class="btn btn-primary me-2">
+
+              {{ isEditMode ? 'Update Time Period' : 'Save Time Period' }}
+
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="goBack()">
+
+              Cancel
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</div>

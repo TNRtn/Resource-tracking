@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OpertaionalResult } from '../../model/opertaional-result';
 import { Resources } from '../model/resources';
+import { environment  } from '../../../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResourecesService {
-  apiURl = "https://tnr512.runasp.net/api";
+  apiURl = environment .apiURl;
   constructor( private http : HttpClient) { 
     
   }
@@ -42,6 +43,7 @@ addResource(
   referenceKeys: string,
   referenceNoteLinks: string,
   keyPoints: string,
+  revisionCount : number=0,
   id? : number
 ) {
   if(id === null || id===undefined){
@@ -51,7 +53,8 @@ addResource(
     categoryId: categoryId,
     referenceKeys: referenceKeys,
     referenceNoteLinks: referenceNoteLinks,
-    keyPoints: keyPoints
+    keyPoints: keyPoints,
+    revisionCount : revisionCount
   };
 
   return this.http.post<any>(`${this.apiURl}/Resources`, Addbody);
@@ -64,8 +67,10 @@ else{
     categoryId: categoryId,
     referenceKeys: referenceKeys,
     referenceNoteLinks: referenceNoteLinks,
-    keyPoints: keyPoints
+    keyPoints: keyPoints,
+    revisionCount : revisionCount
   }
+  console.log(Updatebody)
   return this.http.post<any>(`${this.apiURl}/Resources`, Updatebody);
 }
 }

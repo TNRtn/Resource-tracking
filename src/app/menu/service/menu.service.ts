@@ -1,11 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment  } from '../../../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
-    apiURl = "https://tnr512.runasp.net/api";
+    apiURl = environment .apiURl;
   constructor(private http : HttpClient) { }
   getMenus(projectId: number) {
     const params = {

@@ -1,50 +1,110 @@
 
 @if (isLoading) {
 
-  <div class="d-flex flex-column align-items-center justify-content-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <div class="container py-5">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h6 class="mt-3 text-secondary">Loading your projects...</h6>
     </div>
-    <p class="text-muted mt-3">Loading projects...</p>
   </div>
 
 }
 @else if (projects.length > 0) {
 
-  <div class="row g-3 g-md-4">
+  <!-- Page Heading -->
+  <div class="container-fluid px-3 px-md-4">
 
-    @for (project of projects; track project.id) {
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="fw-bold mb-1">My Projects</h3>
+        <p class="text-muted mb-0">
+          Select a project to continue your work.
+        </p>
+      </div>
 
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+      <span class="badge bg-primary rounded-pill px-3 py-2">
+        {{ projects.length }} Projects
+      </span>
+    </div>
 
-        <div class="card project-card h-100 shadow-sm"
-             (click)="openProject(project)"
-             role="button"
-             tabindex="0"
-             (keydown.enter)="openProject(project)">
+    <!-- Measurement Notification Popup -->
+    @if (showMissingMeasurementPopup) {
 
-          <div class="project-image">
-            <img
-              [src]="project.imagePath"
-              [alt]="project.name"
-              class="card-img-top">
+      <div class="notification-overlay">
+
+        <div class="notification-popup bg-white shadow-lg rounded-4">
+
+          <div class="notification-header text-center p-4">
+
+            <div class="notification-icon mx-auto mb-3">
+              <i class="bi bi-bell-fill"></i>
+            </div>
+
+            <h5 class="fw-bold mb-1">
+              Measurement Reminder
+            </h5>
+
+            <p class="text-muted small mb-0">
+              Daily Health Notification
+            </p>
+
           </div>
 
-          <div class="card-body d-flex align-items-center gap-3">
+          <div class="notification-body p-4">
 
-            <div class="flex-grow-1 overflow-hidden">
-              <h5 class="card-title fw-bold mb-1 text-truncate">
-                {{ project.name }}
-              </h5>
+            <div class="alert alert-warning d-flex align-items-center gap-3">
+              <i class="bi bi-exclamation-triangle-fill fs-4"></i>
 
-              <small class="text-muted">
-                Project {{ project.id }}
-              </small>
+              <div>
+                <strong>
+                  {{ missingMeasurementCount }} Pending Measurements
+                </strong>
+                <div class="small">
+                  You have missed your stomach measurement entries.
+                </div>
+              </div>
             </div>
 
-            <div class="project-icon">
-              <i class="bi bi-arrow-right-circle-fill"></i>
+            <p class="fw-semibold mb-2">
+              Missing Measurement Dates
+            </p>
+
+            <div class="missing-date-list">
+
+              @for (item of missingMeasurementDates; track item.missingDate) {
+
+                <div class="missing-date-item d-flex align-items-center justify-content-between">
+
+                  <span>
+                    <i class="bi bi-calendar-event text-primary me-2"></i>
+                    {{ item.missingDate | date:'dd MMM yyyy' }}
+                  </span>
+
+                  <span class="badge bg-danger-subtle text-danger">
+                    Pending
+                  </span>
+
+                </div>
+
+              }
+
             </div>
+
+          </div>
+
+          <div class="notification-footer p-3 border-top text-end">
+
+            <button
+              type="button"
+              class="btn btn-secondary px-4"
+              (click)="closeMissingMeasurementPopup()">
+
+              <i class="bi bi-x-circle me-1"></i>
+              Cancel
+
+            </button>
 
           </div>
 
@@ -54,17 +114,86 @@
 
     }
 
+    <!-- Project Cards -->
+    <div class="row g-4">
+
+      @for (project of projects; track project.id) {
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+          <div
+            class="card project-card h-100 border-0 shadow-sm"
+            (click)="openProject(project)"
+            role="button"
+            tabindex="0"
+            (keydown.enter)="openProject(project)">
+
+            <!-- Project Image -->
+            <div class="project-image position-relative">
+
+              <img
+                [src]="project.imagePath"
+                [alt]="project.name"
+                class="card-img-top">
+
+              <div class="project-image-overlay"></div>
+
+            </div>
+
+            <!-- Project Details -->
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+
+              <div class="flex-grow-1 overflow-hidden">
+
+                <h5 class="card-title fw-bold mb-1 text-truncate">
+                  {{ project.name }}
+                </h5>
+
+                <small class="text-muted">
+                  Project #{{ project.id }}
+                </small>
+
+              </div>
+
+              <div class="project-icon">
+                <i class="bi bi-arrow-right-circle-fill"></i>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
   </div>
 
 }
 @else {
 
-  <div class="text-center py-5">
-    <i class="bi bi-folder2-open display-4 text-secondary"></i>
-    <h5 class="mt-3">No Projects Available</h5>
-    <p class="text-muted">
-      There are currently no projects to display.
-    </p>
+  <!-- Empty State -->
+  <div class="container py-5">
+
+    <div class="empty-projects text-center bg-white rounded-4 shadow-sm p-5">
+
+      <div class="empty-icon mb-3">
+        <i class="bi bi-folder2-open"></i>
+      </div>
+
+      <h4 class="fw-bold">
+        No Projects Available
+      </h4>
+
+      <p class="text-muted mb-0">
+        There are currently no projects to display.
+        Please check back later.
+      </p>
+
+    </div>
+
   </div>
 
 }

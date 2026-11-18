@@ -1,1 +1,0 @@
-import{La as n,Ma as a,Ra as r,V as o,Ya as i}from"./chunk-2HAGABU7.js";var m=(()=>{class e{static{this.\u0275fac=function(t){return new(t||e)}}static{this.\u0275cmp=o({type:e,selectors:[["app-dashboard"]],standalone:!0,features:[i],decls:2,vars:0,template:function(t,d){t&1&&(n(0,"p"),r(1,"dashboard works!"),a())}})}}return e})();export{m as DashboardComponent};

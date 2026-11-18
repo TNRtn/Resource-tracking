@@ -1,0 +1,404 @@
+<div class="container-fluid mt-4">
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="mb-1">Stomach Measurement</h3>
+      <p class="text-muted mb-0">
+        Track your stomach measurements and monitor your progress.
+      </p>
+    </div>
+  </div>
+  <!-- Date Range Filter -->
+<div class="card shadow-sm mb-4">
+
+  <div class="card-body">
+
+    <div class="row align-items-end g-3">
+
+      <div class="col-md-4">
+
+        <label class="form-label">From Date</label>
+
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="fromDate"
+          [max]="toDate"
+          (change)="onDateRangeChange()">
+
+      </div>
+
+      <div class="col-md-4">
+
+        <label class="form-label">To Date</label>
+
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="toDate"
+          [min]="fromDate"
+          [max]="getTodayDate()"
+          (change)="onDateRangeChange()">
+
+      </div>
+
+      <div class="col-md-4">
+
+        <button
+          class="btn btn-outline-primary w-100"
+          type="button"
+          (click)="initializeDateRange(); onDateRangeChange()">
+
+          Last 7 Days
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="row g-3 mb-4">
+
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">Average Measurement</h6>
+
+        <h3>
+          {{ averageMeasurement | number:'1.2-2' }} cm
+        </h3>
+
+        <small>
+          {{ periodMeasurements.length }} recorded measurements
+          in selected date range
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">Measurement Change</h6>
+
+        <h3>
+          {{ measurementChange > 0 ? '+' : '' }}
+          {{ measurementChange | number:'1.2-2' }} cm
+        </h3>
+
+        <small>
+          Difference between first and latest measurement
+          in selected date range
+        </small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- Success Message -->
+  <div class="alert alert-success alert-dismissible fade show"
+       *ngIf="successMessage">
+    {{ successMessage }}
+
+    <button type="button"
+            class="btn-close"
+            (click)="successMessage = ''">
+    </button>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-danger alert-dismissible fade show"
+       *ngIf="errorMessage">
+    {{ errorMessage }}
+
+    <button type="button"
+            class="btn-close"
+            (click)="errorMessage = ''">
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+      <div class="card summary-card shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Latest Measurement</p>
+
+          <h3 class="mb-1">
+            {{ latestMeasurement
+                ? (latestMeasurement.measurementValue | number:'1.2-2') + ' cm'
+                : '--' }}
+          </h3>
+
+          <small class="text-muted">
+            {{ latestMeasurement
+                ? (latestMeasurement.measurementDate | date:'dd MMM yyyy')
+                : 'No measurements yet' }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card summary-card shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Overall Change</p>
+
+          <h3 class="mb-1"
+              [ngClass]="{
+                'text-success': overallChange < 0,
+                'text-danger': overallChange > 0
+              }">
+
+            {{ totalMeasurements > 1
+                ? ((overallChange > 0 ? '+' : '') + (overallChange | number:'1.2-2') + ' cm')
+                : '--' }}
+
+          </h3>
+
+          <small class="text-muted">
+            Compared with your first measurement
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card summary-card shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Total Measurements</p>
+
+          <h3 class="mb-1">{{ totalMeasurements }}</h3>
+
+          <small class="text-muted">
+            Recorded entries
+          </small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Add Measurement Form -->
+    <div class="col-lg-4">
+
+      <div class="card shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Add Measurement</h5>
+        </div>
+
+        <div class="card-body">
+
+          <form [formGroup]="measurementForm"
+                (ngSubmit)="addMeasurement()">
+
+            <!-- Body Part -->
+            <div class="mb-3">
+              <label class="form-label">Body Part</label>
+
+              <input type="text"
+                     class="form-control"
+                     value="Stomach"
+                     disabled>
+            </div>
+
+            <!-- Measurement Value -->
+            <div class="mb-3">
+
+              <label class="form-label">
+                Measurement (cm)
+                <span class="text-danger">*</span>
+              </label>
+
+              <div class="input-group">
+                <input type="number"
+                       class="form-control"
+                       formControlName="measurementValue"
+                       placeholder="Enter measurement"
+                       min="0.01"
+                       step="0.01">
+
+                <span class="input-group-text">cm</span>
+              </div>
+
+              <small class="text-danger"
+                     *ngIf="f['measurementValue'].touched &&
+                            f['measurementValue'].errors?.['required']">
+                Measurement is required.
+              </small>
+
+              <small class="text-danger"
+                     *ngIf="f['measurementValue'].touched &&
+                            f['measurementValue'].errors?.['min']">
+                Measurement must be greater than zero.
+              </small>
+
+            </div>
+
+            <!-- Measurement Date -->
+            <div class="mb-3">
+
+              <label class="form-label">
+                Measurement Date
+                <span class="text-danger">*</span>
+              </label>
+
+              <input type="date"
+                     class="form-control"
+                     formControlName="measurementDate"
+                     [max]="getTodayDate()">
+
+              <small class="text-danger"
+                     *ngIf="f['measurementDate'].touched &&
+                            f['measurementDate'].errors?.['required']">
+                Measurement date is required.
+              </small>
+
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-3">
+
+              <label class="form-label">Notes</label>
+
+              <textarea class="form-control"
+                        rows="3"
+                        formControlName="notes"
+                        placeholder="Enter optional notes">
+              </textarea>
+
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                    class="btn btn-primary w-100"
+                    [disabled]="isSaving">
+
+              <span *ngIf="isSaving"
+                    class="spinner-border spinner-border-sm me-2">
+              </span>
+
+              {{ isSaving ? 'Saving...' : 'Save Measurement' }}
+
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Measurement History -->
+    <div class="col-lg-8">
+
+      <div class="card shadow-sm">
+
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+
+          <h5 class="mb-0">Measurement History</h5>
+
+          <button class="btn btn-sm btn-outline-primary"
+                  (click)="loadMeasurements()"
+                  [disabled]="isLoading">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Refresh
+          </button>
+
+        </div>
+
+        <div class="card-body p-0">
+
+          <!-- Loading -->
+          <div class="text-center py-5"
+               *ngIf="isLoading">
+
+            <div class="spinner-border text-primary"></div>
+
+            <p class="text-muted mt-2 mb-0">
+              Loading measurements...
+            </p>
+
+          </div>
+
+          <!-- No Records -->
+          <div class="text-center py-5"
+               *ngIf="!isLoading && measurements.length === 0">
+
+            <i class="bi bi-rulers empty-icon"></i>
+
+            <h6 class="mt-3">No measurements recorded</h6>
+
+            <p class="text-muted mb-0">
+              Add your first stomach measurement to start tracking progress.
+            </p>
+
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive"
+               *ngIf="!isLoading && measurements.length > 0">
+
+            <table class="table table-hover align-middle mb-0">
+
+              <thead class="table-light">
+
+                <tr>
+                  <th class="ps-3">Date</th>
+                  <th>Body Part</th>
+                  <th>Measurement</th>
+                  <th>Notes</th>
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor="let item of measurements">
+
+                  <td class="ps-3">
+                    {{ item.measurementDate | date:'dd MMM yyyy' }}
+                  </td>
+
+                  <td>
+                    <span class="badge bg-light text-dark">
+                      {{ item.bodyPart }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <strong>
+                      {{ item.measurementValue | number:'1.2-2' }}
+                      {{ item.unit }}
+                    </strong>
+                  </td>
+
+                  <td>
+                    {{ item.notes || '--' }}
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

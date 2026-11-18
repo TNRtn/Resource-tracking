@@ -70,4 +70,9 @@ export class ProjectLayoutComponent implements OnInit{
 toggleSidebar(): void {
   this.isSidebarOpen = !this.isSidebarOpen;
 }
+goToResources(){
+  
+  this.router.navigate(['projects']);
+
+}
 }

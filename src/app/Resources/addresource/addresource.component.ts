@@ -57,7 +57,13 @@ export class AddresourceComponent implements OnInit {
       categoryId: [null, Validators.required],
       referenceKeys: [''],
       referenceNoteLinks: [''],
-      keyPoints: ['']
+      keyPoints: [''],
+      revisionCount : [0 , [
+    Validators.required,
+    Validators.min(0),
+    Validators.max(5),
+    Validators.pattern(/^\d+$/)
+  ]]
     });
   }
 
@@ -86,7 +92,8 @@ export class AddresourceComponent implements OnInit {
             categoryId: resource.categoryId,
             referenceKeys: resource.referenceKeys,
             referenceNoteLinks: resource.referenceNoteLinks,
-            keyPoints: resource.keyPoints
+            keyPoints: resource.keyPoints,
+            revisionCount : resource.revisionCount
           });
         }
       },
@@ -116,6 +123,7 @@ export class AddresourceComponent implements OnInit {
         form.referenceKeys,
         form.referenceNoteLinks,
         form.keyPoints,
+        form.revisionCount,
         this.resourceId
       ).subscribe({
         next: (response) => {

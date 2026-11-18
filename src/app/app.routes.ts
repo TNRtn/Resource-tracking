@@ -5,6 +5,10 @@ import { ResourcedetailsComponent } from './Resources/resourcedetails/resourcede
 import { AddresourceComponent } from './Resources/addresource/addresource.component';
 import { ProjectlistComponent } from './project/projectlist/projectlist.component';
 import { ProjectLayoutComponent } from './project-layout/project-layout.component';
+import { TimeperiodlistComponent } from './upsc/timeperiod/timeperiodlist/timeperiodlist.component';
+import { AddtimeperiodComponent } from './upsc/timeperiod/addtimeperiod/addtimeperiod.component';
+import { HealthMeasurementComponent } from './dailyhealth/health-measurement/health-measurement.component';
+import { HealthdashboardComponent } from './dailyhealth/healthdashboard/healthdashboard.component';
 //import { DashboardComponent } from './upsc/dashboard/dashboard.component';
 
 export const routes: Routes = [
@@ -34,6 +38,24 @@ export const routes: Routes = [
   component: ProjectlistComponent
 },
 {
+    path: 'daily-health/stomach-measurement',
+    component: HealthdashboardComponent
+  },
+{
+  path: 'project/:id',
+  component: ProjectLayoutComponent,
+  children: [
+    {
+      path: 'daily-health/weightcheck',
+      loadComponent: () => import('./dailyhealth/health-measurement/health-measurement.component').then(m => m.HealthMeasurementComponent)
+    },
+    {
+      path :'daily-health/dashboard',
+      loadComponent: ()=>import( './dailyhealth/healthdashboard/healthdashboard.component').then(m=>m.HealthdashboardComponent)
+    }
+  ]
+},
+{
   path : 'project/:id',
   component : ProjectLayoutComponent,
   children : [
@@ -57,6 +79,17 @@ export const routes: Routes = [
     },{
        path : 'addresource',
        loadComponent : ()=> import ('./Resources/addresource/addresource.component').then(m=>m.AddresourceComponent)
+    },{
+      path : 'upsc/Timeperiods',
+      loadComponent : ()=> import('./upsc/timeperiod/timeperiodlist/timeperiodlist.component').then(m=>m.TimeperiodlistComponent)
+    },
+    {
+      path :'timeperiod/add',
+      loadComponent : ()=>import('./upsc/timeperiod/addtimeperiod/addtimeperiod.component').then(m=>m.AddtimeperiodComponent)
+    },
+    {
+      path: 'timeperiod/edit/:id',
+      loadComponent : ()=> import('./upsc/timeperiod/addtimeperiod/addtimeperiod.component').then(m=>m.AddtimeperiodComponent)
     }
   ]
 },

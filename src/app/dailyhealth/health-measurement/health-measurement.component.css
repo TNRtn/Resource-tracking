@@ -1,0 +1,49 @@
+.summary-card {
+  border: none;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.summary-card h3 {
+  font-weight: 600;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  border-bottom: 1px solid #eee;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-control {
+  padding: 10px;
+}
+
+.table th {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.table td {
+  font-size: 14px;
+}
+
+.empty-icon {
+  font-size: 40px;
+  color: #adb5bd;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 7px 10px;
+}
+
+textarea {
+  resize: vertical;
+}

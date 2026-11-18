@@ -1,0 +1,184 @@
+
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="mb-1">Time Periods</h3>
+      <p class="text-muted mb-0">
+        Manage your historical time periods
+      </p>
+    </div>
+
+    <a [routerLink]="['/project', projectId, 'timeperiod', 'add']" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i>
+      Add Time Period
+    </a>
+  </div>
+
+  <!-- Search and Sort -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-6">
+          <label class="form-label">Search by Name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter time period name"
+            [(ngModel)]="searchName"
+            (keyup.enter)="search()">
+        </div>
+        <div class="col-md-3">
+        <label class="form-label">Select Category</label>
+
+        <select
+          class="form-select"
+          [(ngModel)]="selectedCategoryId">
+
+          <option [ngValue]="null">All Categories</option>
+
+          <option
+            *ngFor="let category of categories"
+            [ngValue]="category.id">
+
+            {{ category.name }}
+
+          </option>
+
+        </select>
+      </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Sort by Date</label>
+          <select
+            class="form-select"
+            [(ngModel)]="sortOrder">
+
+            <option value="DESC">Latest First</option>
+            <option value="ASC">Oldest First</option>
+
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <button
+            class="btn btn-primary me-2"
+            (click)="search()">
+            Search
+          </button>
+
+          <button
+            class="btn btn-outline-secondary"
+            (click)="clearSearch()">
+            Clear
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Loading time periods...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage"
+       class="alert alert-danger">
+    {{ errorMessage }}
+    <button class="btn btn-sm btn-outline-danger ms-3"
+            (click)="loadTimePeriods()">
+      Retry
+    </button>
+  </div>
+
+  <!-- TimePeriod Table -->
+  <div *ngIf="!isLoading && !errorMessage"
+       class="card shadow-sm">
+
+    <div class="card-body">
+
+      <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+                                @for (item of timePeriods; track item.id; let i = $index) {
+
+                        <tr>
+
+                          <td>{{ i + 1 }}</td>
+
+                          <td>
+                            <strong>{{ item.name }}</strong>
+                          </td>
+
+                          <td>
+                            {{ item.periodDate | date:'dd MMM yyyy' }}
+                          </td>
+
+                          <td>
+                            <span class="badge bg-info text-dark">
+                              {{ item.categoryName }}
+                            </span>
+                          </td>
+
+                          <td>
+                            {{ item.description || 'N/A' }}
+                          </td>
+
+                          <td>
+
+                            <a
+                             [routerLink]="['/project', projectId, 'timeperiod', 'edit', item.id]"
+                              class="btn btn-sm btn-outline-warning">
+                              Edit
+                            </a>
+                             <button
+    type="button"
+    class="btn btn-sm btn-outline-danger"
+    (click)="deleteTimePeriod(item.id)">
+    Delete
+  </button>
+                          </td>
+
+                        </tr>
+
+                      }
+                      @if (timePeriods.length === 0) {
+
+  <tr>
+    <td colspan="6" class="text-center py-4 text-muted">
+      No time periods found.
+    </td>
+  </tr>
+
+}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
