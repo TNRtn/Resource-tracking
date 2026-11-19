@@ -9,6 +9,7 @@ import { TimeperiodlistComponent } from './upsc/timeperiod/timeperiodlist/timepe
 import { AddtimeperiodComponent } from './upsc/timeperiod/addtimeperiod/addtimeperiod.component';
 import { HealthMeasurementComponent } from './dailyhealth/health-measurement/health-measurement.component';
 import { HealthdashboardComponent } from './dailyhealth/healthdashboard/healthdashboard.component';
+import { TargetComponent } from './upsc/Additionalskills/target/target.component';
 //import { DashboardComponent } from './upsc/dashboard/dashboard.component';
 
 export const routes: Routes = [
@@ -39,7 +40,7 @@ export const routes: Routes = [
 },
 {
     path: 'daily-health/stomach-measurement',
-    component: HealthdashboardComponent
+    component: TargetComponent
   },
 {
   path: 'project/:id',
@@ -90,6 +91,9 @@ export const routes: Routes = [
     {
       path: 'timeperiod/edit/:id',
       loadComponent : ()=> import('./upsc/timeperiod/addtimeperiod/addtimeperiod.component').then(m=>m.AddtimeperiodComponent)
+    },{
+      path :'upsc/targets',
+      loadComponent : ()=>import('./upsc/Additionalskills/target/target.component').then(m=>m.TargetComponent)
     }
   ]
 },

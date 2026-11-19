@@ -1,0 +1,47 @@
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.card-header {
+  border-bottom: 1px solid #eee;
+}
+
+.form-control,
+.form-select {
+  padding: 10px 12px;
+  border-radius: 7px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+}
+
+.btn {
+  border-radius: 7px;
+  padding: 9px 16px;
+}
+
+.table th {
+  font-size: 14px;
+  color: #555;
+  white-space: nowrap;
+}
+
+.table td {
+  font-size: 14px;
+}
+
+.filter-select {
+  width: 150px;
+}
+
+.badge {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
