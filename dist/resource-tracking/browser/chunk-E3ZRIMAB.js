@@ -1,0 +1,1 @@
+import{Qa as o,Ra as n,X as a,Ya as r,eb as d}from"./chunk-EDPUWT6A.js";var l=(()=>{class e{static{this.\u0275fac=function(t){return new(t||e)}}static{this.\u0275cmp=a({type:e,selectors:[["app-healthdashboard"]],standalone:!0,features:[d],decls:2,vars:0,template:function(t,s){t&1&&(o(0,"p"),r(1,"healthdashboard works!"),n())}})}}return e})();export{l as HealthdashboardComponent};

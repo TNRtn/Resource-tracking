@@ -16,6 +16,38 @@
 
   <div class="container-fluid px-3 px-md-4 py-4">
 
+    <!-- Cumulative UPSC Score -->
+    <section class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-3 bg-warning bg-opacity-10 p-3">
+              <i class="bi bi-trophy-fill text-warning fs-2"></i>
+            </div>
+
+            <div>
+              <h5 class="fw-bold mb-1">UPSC Cumulative Score</h5>
+              <p class="text-muted small mb-0">
+                Total points earned from completed targets.
+              </p>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <h2 class="fw-bold text-success mb-0">
+              {{ cumulativeScore }}
+            </h2>
+            <small class="text-muted">Total Points</small>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
     <!-- Active Target Countdown -->
     @if (activeTargets.length > 0) {
 
@@ -143,6 +175,32 @@
 
                     }
 
+                    <!-- Complete Target Button -->
+                    <div class="mt-3">
+
+                      <button
+                        type="button"
+                        class="btn btn-success w-100 rounded-3"
+                        [disabled]="completingTargetId === target.id"
+                        (click)="completeTarget(target.id)">
+
+                        @if (completingTargetId === target.id) {
+
+                          <span class="spinner-border spinner-border-sm me-2"></span>
+                          Completing...
+
+                        }
+                        @else {
+
+                          <i class="bi bi-check-circle-fill me-2"></i>
+                          Mark as Completed
+
+                        }
+
+                      </button>
+
+                    </div>
+
                   </div>
 
                 </div>
@@ -158,6 +216,7 @@
       </section>
 
     }
+
 
     <!-- Page Heading -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
@@ -179,6 +238,7 @@
       </span>
 
     </div>
+
 
     <!-- Measurement Notification Popup -->
     @if (showMissingMeasurementPopup) {
@@ -269,6 +329,7 @@
       </div>
 
     }
+
 
     <!-- Project Cards Heading -->
     <div class="d-flex align-items-center gap-2 mb-3">

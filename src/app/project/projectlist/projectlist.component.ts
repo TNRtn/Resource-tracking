@@ -8,6 +8,7 @@ import { MissingMeasurementDate } from '../../dailyhealth/model/health-measureme
 import { HealthMeasurementService } from '../../dailyhealth/services/health-measurement.service';
 import { TargetService } from '../../upsc/Additionalskills/service/target.service';
 import { interval, Subscription } from 'rxjs';
+import { Target } from '../../upsc/Additionalskills/model/target';
 
 @Component({
   selector: 'app-projectlist',
@@ -23,7 +24,9 @@ export class ProjectlistComponent implements OnInit,OnDestroy{
   missingMeasurementDates: MissingMeasurementDate[] = [];
 missingMeasurementCount = 0;
 showMissingMeasurementPopup = false;
-
+cumulativeScore = 0;
+completingTargetId: number | null = null;
+allTargets: Target[] = [];
   // Set this from your actual tracking start date.
   trackingStartDate = '';
 
@@ -124,24 +127,37 @@ getTodayDate(): string {
 }
 
 // Load active targets
+// Load targets and calculate cumulative score
 loadActiveTargets(): void {
 
-  this.targetService.getTargets(true).subscribe({
+  this.targetService.getTargets().subscribe({
 
     next: (response) => {
 
       if (response.isSuccess && response.data) {
 
-        this.activeTargets = response.data.map(target => ({
-          id: target.id,
-          name: target.name,
-          targetDate: target.targetDate,
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          isCompleted: false
-        }));
+        // Store all targets
+        this.allTargets = response.data;
+
+        // Calculate cumulative score from completed targets
+        this.cumulativeScore = this.allTargets
+          .filter(target => target.isCompleted)
+          .reduce((total, target) => total + target.score, 0);
+
+        // Display only active and incomplete targets
+        this.activeTargets = this.allTargets
+          .filter(target => target.isActive && !target.isCompleted)
+          .map(target => ({
+            id: target.id,
+            name: target.name,
+            targetDate: target.targetDate,
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            isCompleted: false,
+            score: target.score
+          }));
 
         this.updateCountdowns();
 
@@ -153,13 +169,19 @@ loadActiveTargets(): void {
         }
 
       } else {
+
+        this.allTargets = [];
         this.activeTargets = [];
+        this.cumulativeScore = 0;
+
       }
     },
 
     error: (error) => {
-      console.error('Error loading active targets:', error);
+      console.error('Error loading targets:', error);
+      this.allTargets = [];
       this.activeTargets = [];
+      this.cumulativeScore = 0;
     }
 
   });
@@ -217,6 +239,51 @@ updateCountdowns(): void {
 
   });
 }
+
+completeTarget(id: number): void {
+
+  const confirmed = confirm(
+    'Are you sure you want to mark this target as completed?'
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  this.completingTargetId = id;
+
+  this.targetService.completeTarget(id).subscribe({
+
+    next: response => {
+
+      this.completingTargetId = null;
+
+      if (response.isSuccess) {
+
+        alert(
+          `Target completed successfully! Your score is ${response.data.score}.`
+        );
+
+        // Reload targets and cumulative score
+        this.loadActiveTargets();
+
+      } else {
+        alert(response.message);
+      }
+    },
+
+    error: error => {
+
+      this.completingTargetId = null;
+
+      alert(
+        error.error?.message || 'Unable to complete target.'
+      );
+    }
+  });
+}
+
+
 ngOnDestroy(): void {
   this.countdownSubscription?.unsubscribe();
 }

@@ -273,6 +273,7 @@
                 <th>Target Name</th>
                 <th>Start Date</th>
                 <th>Target Date</th>
+                <th class="text-center">Score</th>
                 <th>Duration</th>
                 <th>Status</th>
               </tr>
@@ -298,12 +299,24 @@
                   <td>
                     {{ target.targetDate | date:'dd MMM yyyy' }}
                   </td>
+                                    <td class="text-center">
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'bg-success': target.score > 10,
+                        'bg-primary': target.score === 10,
+                        'bg-danger': target.score < 10
+                      }">
+                      {{ target.score }}
+                    </span>
+                  </td>
 
                   <td>
                     {{ getDuration(target.startDate, target.targetDate) }}
                   </td>
 
                   <td>
+                    
 
                     @if (target.isActive) {
                       <span class="badge bg-success-subtle text-success">

@@ -11,6 +11,9 @@ export interface Target {
   startDate: string;
   targetDate: string;
   isActive: boolean;
+  isCompleted: boolean;
+  completedDate: string | null;
+  score: number;
   createdDate: string;
 }
 

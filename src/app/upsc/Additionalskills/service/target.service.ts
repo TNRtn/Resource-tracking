@@ -33,4 +33,11 @@ export class TargetService {
       input
     );
   }
+
+  completeTarget(id: number): Observable<OpertaionalResult<Target>> {
+  return this.http.put<OpertaionalResult<Target>>(
+    `${this.apiUrl}/${id}/Complete`,
+    {}
+  );
+}
 }
